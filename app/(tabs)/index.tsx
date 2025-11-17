@@ -1,98 +1,106 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import AuthForm from '../auth-form';
+import InventoryList from '../inventory-list';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+// Mock inventory data
+const MOCK_INVENTORY = [
+  {
+    id: '1',
+    name: '1967 Mustang Fastback',
+    description: 'Classic muscle car in excellent condition',
+    category: 'Vehicles',
+    quantity: 1,
+    min_quantity: 1,
+    location: 'Bay 3',
+    price: 45000,
+    sku: 'CAR-001',
+    image_url: 'https://images.unsplash.com/photo-1584345604476-8ec5f4d6c952?w=200',
+  },
+  {
+    id: '2',
+    name: 'Vintage Gas Pump',
+    description: 'Restored 1950s Shell gas pump',
+    category: 'Memorabilia',
+    quantity: 2,
+    min_quantity: 1,
+    location: 'Showroom A',
+    price: 2500,
+    sku: 'PUMP-045',
+    image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200',
+  },
+  {
+    id: '3',
+    name: 'Chrome Bumper Set',
+    description: 'Universal chrome bumper kit',
+    category: 'Parts',
+    quantity: 5,
+    min_quantity: 3,
+    location: 'Shelf B2',
+    price: 450,
+    sku: 'PART-128',
+  },
+  {
+    id: '4',
+    name: 'Neon Bar Sign',
+    description: 'Custom Route 66 neon sign',
+    category: 'Signs',
+    quantity: 1,
+    min_quantity: 2,
+    location: 'Storage',
+    price: 800,
+    sku: 'SIGN-009',
+    image_url: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=200',
+  },
+];
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  if (!isAuthenticated) {
+    return <AuthForm onAuthSuccess={() => setIsAuthenticated(true)} />;
+  }
+
+  const handleEdit = (item: any) => {
+    alert(`Edit: ${item.name}`);
+  };
+
+  return (
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Badass Garage Inventory</Text>
+        <Text style={styles.subtitle}>{MOCK_INVENTORY.length} items in stock</Text>
+      </View>
+      
+      <View style={styles.content}>
+        <InventoryList items={MOCK_INVENTORY} onEdit={handleEdit} />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#f7f8f9',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  header: {
+    padding: 20,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#010101',
+    marginBottom: 4,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+  },
+  content: {
+    padding: 16,
   },
 });
