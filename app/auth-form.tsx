@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import {
   ActivityIndicator,
-  Image,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -43,11 +41,7 @@ export default function AuthForm({ onAuthSuccess }: AuthFormProps) {
   };
 
   return (
-    <ImageBackground
-      source={require('../assets/images/login-bg.webp')}
-      style={styles.backgroundImage}
-      resizeMode="cover"
-    >
+    <View style={styles.backgroundImage}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
@@ -57,13 +51,9 @@ export default function AuthForm({ onAuthSuccess }: AuthFormProps) {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.card}>
-            {/* Logo */}
+            {/* Title */}
             <View style={styles.logoContainer}>
-              <Image
-                source={require('../assets/images/logo.webp')}
-                style={styles.logo}
-                resizeMode="contain"
-              />
+              <Text style={styles.title}>Badass Garage</Text>
             </View>
 
             {/* Subtitle */}
@@ -124,7 +114,7 @@ export default function AuthForm({ onAuthSuccess }: AuthFormProps) {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -133,6 +123,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f3f4f6',
   },
   container: {
     flex: 1,
@@ -148,7 +139,7 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     maxWidth: 320,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 32,
     borderWidth: 1,
@@ -161,11 +152,13 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 16,
   },
-  logo: {
-    width: 96,
-    height: 96,
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#010101',
+    textAlign: 'center',
   },
   subtitle: {
     textAlign: 'center',
